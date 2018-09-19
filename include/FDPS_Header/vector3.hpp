@@ -2,6 +2,7 @@
 
 #include<iostream>
 #include<iomanip>
+#include<math.h>
 
 #ifdef PARTICLE_SIMULATOR_MPI_PARALLEL
 #include "mpi.h"

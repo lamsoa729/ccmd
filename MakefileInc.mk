@@ -1,38 +1,9 @@
-SFTPATH:=/usr/local
-
-# inherit flags, includes and libs from Trilinos and pvfmm
-#include $(SFTPATH)/include/Makefile.export.Trilinos
-# Need to have pvfmm installed on computer
-include $(PVFMM_DIR)/MakeVariables
-
-# internal includes
-#SCTL := ${CURDIR}/SimToolbox/sctl
-#SIMTOOLBOX := ${CURDIR}/SimToolbox/
-
-# external libraries
-TRNG = $(SFTPATH)/include/trng
-PVFMM = $(SFTPATH)/include/pvfmm
-YAML = ${CURDIR}/lib/yaml-cpp/
-#EIGEN= $(SFTPATH)/include/eigen3
-
-USERINCLUDE = -I$(TRNG)/include -I$(YAML)/include
-#USERINCLUDE = -I$(TRNG)/include -I$(EIGEN) -I$(SCTL) -I$(SIMTOOLBOX)
-USERLIB_DIRS = -L$(SFTPATH)/lib -L${CURDIR}/lib -Wl,-rpath,$(YAML)/osxlib -L$(YAML)/osxlib/ 
-USERLIBS = -ltrng4 -lyaml-cpp
-
-INCLUDE_DIRS = $(USERINCLUDE)
-#INCLUDE_DIRS = $(Trilinos_INCLUDE_DIRS) $(Trilinos_TPL_INCLUDE_DIRS) $(USERINCLUDE)
-LIBRARY_DIRS = $(USERLIB_DIRS)
-#LIBRARY_DIRS = $(Trilinos_LIBRARY_DIRS) $(Trilinos_TPL_LIBRARY_DIRS) $(USERLIB_DIRS)
-LIBRARIES = $(USERLIBS)
-#LIBRARIES = $(Trilinos_LIBRARIES) $(Trilinos_TPL_LIBRARIES) $(USERLIBS)
-
-CXX= mpicxx
-LINK= $(CXX)
+#LINK= $(CXX)
 
 # optimized
-CXXFLAGS= $(CXXFLAGS_PVFMM) 
-LINKFLAGS= $(CXXFLAGS) $(LDLIBS_PVFMM) 
+#CXXFLAGS= 
+##CXXFLAGS= $(CXXFLAGS_PVFMM) 
+#LINKFLAGS= $(CXXFLAGS) 
 #LINKFLAGS= $(CXXFLAGS) $(LDLIBS_PVFMM) $(Trilinos_EXTRA_LD_FLAGS) #-lm -ldl
 
 # remove some flags for debugging
