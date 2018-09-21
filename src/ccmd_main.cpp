@@ -1,7 +1,7 @@
 // Test function
-#include <iostream>
-#include <yaml-cpp/yaml.h>
-#include "FDPS_Header/tree.hpp"
+#include <general_inc.hpp>
+#include <particles.hpp>
+#include <system.hpp>
 
 int main(int argc, char *argv[])
 {
