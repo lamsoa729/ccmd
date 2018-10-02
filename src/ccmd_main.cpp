@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
     // Main loop
     int i_step = 0;
     while (i_step < sim_system.getTotalSteps()) {
-        std::cout << "Hello world_" << i_step << std::endl;
+        sim_system.stepForward();
         i_step++;
     }
     return 0;

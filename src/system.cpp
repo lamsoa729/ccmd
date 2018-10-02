@@ -10,10 +10,16 @@ System::System(){}
  */
 void System::Configure(std::string config_file) {
     YAML::Node config_node = YAML::LoadFile(config_file);
+    // Get simulation parameters from configure file
+    delta_ = config_node["delta"].as<double>();
+    n_steps_ = config_node["n_steps"].as<int>();
+    n_posit_ = config_node["n_posit"].as<int>();
+    // Initialize FDPS structures
+    dinfo_.initialize();
+    ptcls_.initialize();
 
-    //delta_ = config_node["delta"].as<int>();
-    //n_steps_ = config_node["n_steps"].as<int>();
-    //n_posit_ = config_node["n_posit"].as<int>();
+
+
 }
 
 /*! \brief Step the simulation forward one delta
@@ -24,5 +30,5 @@ void System::Configure(std::string config_file) {
  * \return void
  */
 void System::stepForward() {
-    
+    std::cout << "Step " << std::endl;
 }

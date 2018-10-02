@@ -1,19 +1,24 @@
 #ifndef SYSTEM_H
 #define SYSTEM_H
 #include <general_inc.hpp>
+#include <particles.hpp>
 
 class System
 {
 private:
-    // Configurations file
-    int delta_;
+    double delta_;
     int n_steps_;
     int n_posit_;
-    
 
+    PS::DomainInfo dinfo_;
+
+    PS::ParticleSystem<Particle> ptcls_;
+
+    //PS::TreeForForceLong<> em_force;
+    
 public:
     System();
-    virtual ~System() {};
+    virtual ~System() {PS::Finalize();}
 
     void Configure(std::string config_file);
 
