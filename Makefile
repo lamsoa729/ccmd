@@ -19,16 +19,16 @@ YAML = lib/yaml-cpp# Yaml-cpp library located in internal library
 SRC = $(wildcard $(SRC_DIR)/*.cpp)# Get all cpp source files
 OBJ = $(SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)# List object files from source files
 
-CPPFLAGS += -Iinclude -I$(TRNG)/include -I$(YAML)/include# Preprocessor flags, such as .hpp file.
-CFLAGS += -Wall -Wl,-rpath,$(YAML)/osxlib/# Compiler flags,
-LDFLAGS += -Llib -L$(SFTPATH)/lib -L$(YAML)/osxlib/# Linker flags,
+CPPFLAGS += -I$(YAML)/include -Iinclude -I$(TRNG)/include# Preprocessor flags, such as .hpp file.
+CFLAGS += -Wall -Wl,-rpath,$(YAML)/mpicxx/# Compiler flags,
+LDFLAGS += -Llib -L$(YAML)/mpicxx/ -L$(SFTPATH)/lib# Linker flags, Make sure special libraries come first
 LDLIBS += -lm -ltrng4 -lyaml-cpp# Third party libraries to link against, see lib
 
 $(EXE): $(OBJ)
 	$(CXX) $(LDFLAGS) $^ $(LDLIBS) -o $@
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
-	$(CXX) $(CPPFLAGS) $(CFLAGS) -MP -MMD -c $< -o $@
+	$(CXX) $(CPPFLAGS) $(CFLAGS) -MP -MMD -c $< -o $@ $(LDLIBS)
 #LIBRARIES = $(Trilinos_LIBRARIES) $(Trilinos_TPL_LIBRARIES) $(USERLIBS)
 
 .PHONY: all clean test love-not-war
