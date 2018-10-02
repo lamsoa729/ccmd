@@ -14,7 +14,7 @@ private:
 
     PS::ParticleSystem<Particle> ptcls_;
 
-    //PS::TreeForForceLong<> em_force;
+    PS::TreeForForceLong<LongForce, Particle, Particle>::Quadrupole em_force;
     
 public:
     System();

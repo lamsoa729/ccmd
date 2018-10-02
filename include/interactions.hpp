@@ -9,7 +9,7 @@ struct CalcColoumbForce {
                        const PS::S32 ni, // Number of i particles
                        const TPJ * jp, // Pointer to particle j
                        const PS::S32 nj, // Number of j particle
-                       LongForce * force) {
+                       LongForce * em_force) {
         std::cout << "Calculating coloumb force; JK" << std::endl;
     }
 
