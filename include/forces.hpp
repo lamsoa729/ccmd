@@ -6,10 +6,12 @@ class LongForce // Long range force class such as coloumb or grav forces
 {
 public:
     PS::F64vec3 force;
+    PS::F64 pot;
     PS::F64 sepmin; // Minimum seperation
 
     void clear() { 
         force = 0;
+        pot = 0;
         sepmin = std::numeric_limits<double>::max();
     }
     LongForce();
