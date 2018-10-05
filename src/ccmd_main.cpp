@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
     // Main loop
     int i_step = 0;
     while (i_step < sim_system.getTotalSteps()) {
-        sim_system.stepForward();
+        sim_system.stepForward(i_step);
         i_step++;
     }
     return 0;

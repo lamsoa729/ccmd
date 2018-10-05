@@ -14,7 +14,7 @@ public:
         pot = 0;
         sepmin = std::numeric_limits<double>::max();
     }
-    LongForce();
+    LongForce() {}
     virtual ~LongForce() {}
 };
 

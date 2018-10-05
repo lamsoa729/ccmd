@@ -6,8 +6,10 @@
 class Particle
 {
 private:
+    PS::F64 id_;
     PS::F64 mass_, charge_;
     PS::F64vec pos_, vel_, acc_;
+    PS::F64 pot_;
 
 public:
     // Class variables
@@ -31,7 +33,7 @@ public:
     void setVel(PS::F64vec &in) { vel_ = in;}
     void setAcc(PS::F64vec &in) { acc_ = in;}
 
-    void copyFromPtcl(const Particle &in){
+    void copyFromFP(const Particle &in){
         mass_ = in.getMass();
         charge_ = in.getCharge();
         pos_ = in.getPos();
@@ -41,7 +43,10 @@ public:
         acc_ = frc.force / mass_;
     }
 
-    void clear() { acc_ = 0.0; }
+    void clear() { 
+        acc_ = 0.0; 
+        pot_ = 0.0;
+    }
 
 
 };

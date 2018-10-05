@@ -17,9 +17,10 @@ void System::Configure(std::string config_file) {
     // Initialize FDPS structures
     dinfo_.initialize();
     ptcls_.initialize();
-
-
-
+    em_force_tree_.initialize(100);
+    // Set up particle system
+    /* TODO: Setup particles in random configuration. <05-10-18, ARL> */
+    calcCoulombAllAndWriteBack();
 }
 
 /*! \brief Step the simulation forward one delta
@@ -29,6 +30,19 @@ void System::Configure(std::string config_file) {
  *
  * \return void
  */
-void System::stepForward() {
+void System::stepForward(int i_step) {
     std::cout << "Step " << std::endl;
+    // Integration algorithm
+    //calcCoulombAllAndWriteBack(dinfo_, ptcls_, em_force_tree_);
+    
 }
+
+void System::calcCoulombAllAndWriteBack() {
+    dinfo_.decomposeDomainAll(ptcls_);
+    ptcls_.exchangeParticle(dinfo_);
+    em_force_tree_.calcForceAllAndWriteBack(CalcCoulombForce<Particle>(), 
+                                  CalcCoulombForce<PS::SPJMonopole>(),
+                                  ptcls_,
+                                  dinfo_);
+}
+

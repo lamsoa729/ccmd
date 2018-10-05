@@ -5,13 +5,13 @@
 #include <forces.hpp>
 
 template <class TPJ> // Template Particle j
-struct CalcColoumbForce {
+struct CalcCoulombForce {
     void operator () ( const Particle * ep_i, // Array of essential particles i
                        const PS::S32 n_ip, // Number of i particles
                        const TPJ * ep_j, // Array of essential particles j, 
                                        //may be an FDPS super particle
                        const PS::S32 n_jp, // Number of j particles
-                       LongForce * em_force) {
+                       LongForce * em_force){ 
         PS::F64 k = 1; // Coloumbs constant in dimensionless units
         for (PS::S32 i = 0; i < n_ip; ++i) {
             PS::F64vec xi = ep_i[i].getPos(); // Position of ip
@@ -32,7 +32,6 @@ struct CalcColoumbForce {
             em_force[i].pot += poti*factor;
         }
     }
-
 };
 
  /*! \brief Applies the fast multipole method of the coloumb for to particles
@@ -45,7 +44,7 @@ struct CalcColoumbForce {
   * \param tree templated tree for force (TTFF) object
   * \return void
   */
-template<class TDI, class TPS, class TTFF>
-void calcCouloumbAllAndWriteBack(TDI &dinfo, TPS &ptlcs, TTFF &tree); 
+//template<class TDI, class TPS, class TTFF>
+//void calcCoulombAllAndWriteBack(TDI &dinfo, TPS &ptlcs, TTFF &tree); 
 
 #endif /* end of include guard: INTERACTIONS_HPP*/
