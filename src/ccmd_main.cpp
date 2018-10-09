@@ -1,6 +1,6 @@
 // Test function
 //#include <general_inc.hpp>
-#include <particles.hpp>
+//#include <particles.hpp>
 #include <system.hpp>
 
 int main(int argc, char *argv[])
@@ -14,6 +14,6 @@ int main(int argc, char *argv[])
         sim_system.stepForward(i_step);
         i_step++;
     }
+    PS::Finalize();
     return 0;
-
 }

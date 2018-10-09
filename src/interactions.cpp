@@ -1,5 +1,25 @@
 #include "interactions.hpp"
 
+CalcCoulombTrapForce::CalcCoulombTrapForce(PS::F64 Vo, PS::F64 Vec, 
+                                           PS::F64 ro, PS::F64 zo, 
+                                           PS::F64 Omega, PS::F64 kappa){
+    Vo_ = Vo;
+    Vec_ = Vec;
+    ro_ = ro;
+    zo_ = zo;
+    Omega_ = Omega;
+    kappa_ = kappa;
+}
+
+void CalcCoulombTrapForce::CCTFPrint(){
+    std::cout << "Vo "<< Vo_ << std::endl;
+    std::cout << "Vec "<< Vec_ << std::endl;
+    std::cout << "ro "<< ro_ << std::endl;
+    std::cout << "zo "<< zo_ << std::endl;
+    std::cout << "Omega " << Omega_ <<std::endl;
+    std::cout << "kappa " << kappa_ <<std::endl;
+}
+
 //template <class TPJ>
 //void CalcCoulombForce<TPJ>::operator () ( 
 //                       const Particle * ep_i, // Array of essential particles i
@@ -49,4 +69,5 @@
 //                                  ptcls,
 //                                  dinfo);
 //}
+
 

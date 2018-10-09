@@ -34,17 +34,38 @@ struct CalcCoulombForce {
     }
 };
 
- /*! \brief Applies the fast multipole method of the coloumb for to particles
-  * in the system
-  *
-  *  Detailed description
-  *
-  * \param dinfo templated domain info (TDI) object
-  * \param ptcls templated particle system (PDS) object
-  * \param tree templated tree for force (TTFF) object
-  * \return void
-  */
-//template<class TDI, class TPS, class TTFF>
-//void calcCoulombAllAndWriteBack(TDI &dinfo, TPS &ptlcs, TTFF &tree); 
+class CalcCoulombTrapForce {
+    /* Initialized data memebers */
+    private:
+        inline static PS::F64 Vo_;
+        inline static PS::F64 Vec_;
+        inline static PS::F64 ro_;
+        inline static PS::F64 zo_;
+        inline static PS::F64 Omega_;
+        inline static PS::F64 kappa_;
+
+    public:
+    CalcCoulombTrapForce(double Vo, double Vec, double ro, double zo, 
+                      double Omega, double kappa);
+    CalcCoulombTrapForce() {}
+    void CCTFPrint();
+
+    void operator () ( const Particle * ep_i, // Array of essential particles i
+                       const PS::S32 n_ip, // Number of i particles
+                       const Particle * ep_j, // Array of essential particles j, 
+                                       //may be an FDPS super particle
+                       const PS::S32 n_jp, // Number of j particles
+                       LongForce * trap_force){ 
+        PS::F64 k = 1; // Coloumbs constant in dimensionless units
+        for (PS::S32 i = 0; i < n_ip; ++i) {
+            PS::F64vec xi = ep_i[i].getPos(); // Position of ip
+            PS::F64vec ei = 0.0; // Electric field experienced by ip
+            PS::F64 poti = 0.0; // Potential energy of ip
+            PS::F64 factor = k*ep_i[i].getCharge(); // Force and potential coefficient
+            trap_force[i].force += ei*factor; 
+            trap_force[i].pot += poti*factor;
+        }
+    }
+};
 
 #endif /* end of include guard: INTERACTIONS_HPP*/

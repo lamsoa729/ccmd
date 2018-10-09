@@ -13,16 +13,17 @@ private:
     int n_posit_;
     int n_dcomp_; 
 
-
     PS::DomainInfo dinfo_;
 
     PS::ParticleSystem<Particle> ptcls_;
 
     PS::TreeForForceLong<LongForce, Particle, Particle>::Monopole em_force_tree_;
+
+    PS::TreeForForceLong<LongForce, Particle, Particle>::Monopole trap_force_tree_;
     
 public:
     System();
-    virtual ~System() {PS::Finalize();}
+    virtual ~System() {}
 
     void Configure(std::string config_file);
 
