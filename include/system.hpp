@@ -8,10 +8,13 @@
 class System
 {
 private:
-    double delta_;
-    int n_steps_;
-    int n_posit_;
-    int n_dcomp_; 
+    double delta_; // Time step in simulation units
+    int n_steps_; // Number of steps in simulation
+    int n_posit_; // Number of steps between writing system state
+    int n_dcomp_;  // Number of steps between domain decomposition
+    int n_ptcl_; // Number of particles
+
+    std::shared_ptr<TRngPool> RngPoolPtr_;
 
     PS::DomainInfo dinfo_;
 
@@ -26,6 +29,8 @@ public:
     virtual ~System() {}
 
     void Configure(std::string config_file);
+
+    void GenerateInitialState();
 
     void stepForward(int i_step);
 

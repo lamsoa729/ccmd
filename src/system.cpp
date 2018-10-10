@@ -14,22 +14,38 @@ void System::Configure(std::string config_file) {
     delta_ = config_node["delta"].as<double>();
     n_steps_ = config_node["n_steps"].as<int>();
     n_posit_ = config_node["n_posit"].as<int>();
+    n_ptcl_ = config_node["n_ptcl"].as<int>();
     PS::F64 Vo = config_node["Vo"].as<PS::F64>();
     PS::F64 Vec = config_node["Vec"].as<PS::F64>();
-    PS::F64 ro = config_node["ro"].as<PS::F64>();
+    //PS::F64 ro = config_node["ro"].as<PS::F64>();
     PS::F64 zo = config_node["zo"].as<PS::F64>();
     PS::F64 Omega = config_node["Omega"].as<PS::F64>();
     PS::F64 kappa = config_node["kappa"].as<PS::F64>();
+    
+    GenerateInitialState();
 
-    CalcCoulombTrapForce cctp(Vo, Vec, ro, zo, Omega, kappa);
+    // Initialize constants for CalcOulombTrapForce objects
+    CalcCoulombTrapForce cctp(Vo, Vec, zo, Omega, kappa);
     // Initialize FDPS structures
     dinfo_.initialize();
     ptcls_.initialize();
     em_force_tree_.initialize(100);
     // Set up particle system
+
     /* TODO: Setup particles in random configuration. <05-10-18, ARL> */
-    //calcCoulombAllAndWriteBack();
+    calcCoulombAllAndWriteBack();
 }
+
+/*! \brief Randomly place particles in simulation
+ *
+ *  Detailed description
+ *
+ * \return Return parameter description
+ */
+void System::GenerateInitialState() {
+    
+}
+
 
 /*! \brief Step the simulation forward one delta
  *
@@ -41,9 +57,7 @@ void System::Configure(std::string config_file) {
 void System::stepForward(int i_step) {
     std::cout << "Step " << std::endl;
     // Integration algorithm
-    //calcCoulombAllAndWriteBack();
-    CalcCoulombTrapForce cctp;
-    cctp.CCTFPrint();
+    calcCoulombAllAndWriteBack();
     
 }
 
@@ -61,8 +75,8 @@ void System::calcCoulombAllAndWriteBack() {
                                   CalcCoulombForce<PS::SPJMonopole>(),
                                   ptcls_,
                                   dinfo_);
-    //trap_force_tree_.calcForceAllAndWriteBack(CalcCoulombTrapForce<Particle>(),
-    //                                          ptcls_,
-    //                                          dinfo_);
+    trap_force_tree_.calcForceAllAndWriteBack(CalcCoulombTrapForce(),
+                                              ptcls_,
+                                              dinfo_);
 }
 
