@@ -3,6 +3,6 @@
 
 #include <FDPS_Header/particle_simulator.hpp>
 #include <iostream>
-#include <TRNG>
+#include "TRngPool.hpp"
 
 #endif /* end of include guard: GENERAL_INC_HPP */

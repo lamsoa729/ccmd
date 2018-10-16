@@ -1,4 +1,6 @@
 #include <system.hpp>
+#include <omp.h>
+#include <mpi.h>
 #include "yaml-cpp/yaml.h"
 
 System::System(){}
@@ -15,17 +17,19 @@ void System::Configure(std::string config_file) {
     n_steps_ = config_node["n_steps"].as<int>();
     n_posit_ = config_node["n_posit"].as<int>();
     n_ptcl_ = config_node["n_ptcl"].as<int>();
+    PS::F64 mass = config_node["mass"].as<PS::F64>();
+    PS::F64 charge = config_node["charge"].as<PS::F64>();
     PS::F64 Vo = config_node["Vo"].as<PS::F64>();
     PS::F64 Vec = config_node["Vec"].as<PS::F64>();
-    //PS::F64 ro = config_node["ro"].as<PS::F64>();
-    PS::F64 zo = config_node["zo"].as<PS::F64>();
+    PS::F64 ro_ = config_node["ro"].as<PS::F64>();
+    PS::F64 zo_ = config_node["zo"].as<PS::F64>();
     PS::F64 Omega = config_node["Omega"].as<PS::F64>();
     PS::F64 kappa = config_node["kappa"].as<PS::F64>();
     
-    GenerateInitialState();
+    GenerateInitialState(mass, charge);
 
     // Initialize constants for CalcOulombTrapForce objects
-    CalcCoulombTrapForce cctp(Vo, Vec, zo, Omega, kappa);
+    CalcCoulombTrapForce cctp(Vo, Vec, ro_, zo_, Omega, kappa);
     // Initialize FDPS structures
     dinfo_.initialize();
     ptcls_.initialize();
@@ -39,11 +43,38 @@ void System::Configure(std::string config_file) {
 /*! \brief Randomly place particles in simulation
  *
  *  Detailed description
+ *  \param mass Mass of particles
+ *  \param charge Charge of particles
  *
  * \return Return parameter description
  */
-void System::GenerateInitialState() {
+void System::GenerateInitialState(PS::F64 mass, PS::F64 charge) {
+    // Initialize particle system with correct number of particles
+    ptcls_.setNumberOfParticleLocal(n_ptcl_);
+    for (int i = 0; i < n_ptcl_; ++i) {
+        ptcls_[i] = MakeRandomParticle(i, mass, charge);
+    }
     
+}
+
+/*! \brief Make a particle with random position and velocity
+ *
+ *  Detailed description
+ *
+ * \param id ID number of particle
+ * \return Initialized Particle object
+ */
+Particle System::MakeRandomParticle(int id, PS::F64 mass, PS::F64 charge) {
+   Particle ptcl(id, mass, charge); 
+   const int threadID = 0;
+   //const int threadID = omp_get_thread_num();
+   // Find a random position inside rectangular cube
+   PS::F64vec3 randPos((RngPoolPtr_->getN01(threadID) - .5)*2.*ro_, 
+                       (RngPoolPtr_->getN01(threadID) - .5)*2.*ro_,
+                       (RngPoolPtr_->getN01(threadID) - .5)*2.*zo_);
+   ptcl.setPos(randPos);
+   
+   return ptcl;
 }
 
 

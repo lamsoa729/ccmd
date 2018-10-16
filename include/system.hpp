@@ -13,6 +13,8 @@ private:
     int n_posit_; // Number of steps between writing system state
     int n_dcomp_;  // Number of steps between domain decomposition
     int n_ptcl_; // Number of particles
+    PS::F64 ro_; // Radius of the trap
+    PS::F64 zo_; // Length of the trap
 
     std::shared_ptr<TRngPool> RngPoolPtr_;
 
@@ -30,7 +32,9 @@ public:
 
     void Configure(std::string config_file);
 
-    void GenerateInitialState();
+    void GenerateInitialState(PS::F64 mass, PS::F64 charge);
+
+    Particle MakeRandomParticle(int id, PS::F64 mass, PS::F64 charge);
 
     void stepForward(int i_step);
 

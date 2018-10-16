@@ -1,0 +1,13 @@
+n_steps : 1000
+n_posit : 10
+n_ptcl : 100
+seed : 1
+delta : .001
+charge : 1
+mass : 2
+Vo : 2.
+Vec : 3.
+ro : 4.
+zo : 5.
+Omega : 6.
+kappa : 7.
