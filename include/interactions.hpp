@@ -59,27 +59,37 @@ class CalcCoulombTrapForce {
     CalcCoulombTrapForce() {}
     void CCTFPrint();
 
+    double getOmega(){ return Omega_; }
+    double getAlpha(){ return alpha_; }
+    double getBeta(){ return beta_; } 
+
     void operator () ( const Particle * ep_i, // Array of essential particles i
                        const PS::S32 n_ip, // Number of i particles
                        const Particle * ep_j, // Array of essential particles j, 
-                                       //may be an FDPS super particle
-                       const PS::S32 n_jp, // Number of j particles
-                       LongForce * trap_force){ 
+                                       //may be an FDPS super particle (not used)
+                       const PS::S32 n_jp, // Number of j particles (not used)
+                       LongForce * trap_force // Force objects on particles
+                       ){ 
         for (PS::S32 i = 0; i < n_ip; ++i) {
-            PS::F64vec xi = ep_i[i].getPos(); // Position of ip
-            PS::F64 m = ep_i[i].getMass(); // Mass of ip
-            PS::F64 e = ep_i[i].getMass(); // Charge of ip
+            trap_force[i].pot += ptclPot(ep_i[i], trap_force[i].force);
+        }
+    }
+
+    PS::F64 ptclPot(const Particle &ep, 
+                    PS::F64vec &force
+                    ){
+            PS::F64 m = ep.getMass(); 
+            PS::F64 e = ep.getCharge();
+            PS::F64vec xi = ep.getPos();
             PS::F64vec ei = 0.0; // Electric field experienced by ip
-            PS::F64 poti = 0.0; // Potential energy of ip
             ei[0] = (beta_ - (2.*alpha_*e/m))*xi[0]; // Force in the x direction
             ei[1] = (beta_ - (2.*alpha_*e/m))*xi[1]; // Force in the y direction
             ei[2] = -2.0 * beta_* xi[2]; // Force in the z direction
-            poti = (alpha_*e/m)*(xi[0]*xi[0] + xi[1]*xi[1]) + 
-                beta_*.5*((2.*xi[2]*xi[2]) - (xi[0]*xi[0]) - (xi[1]*xi[1]));
+            force += ei*e;
 
-            trap_force[i].force += ei*e; 
-            trap_force[i].pot += poti*e;
-        }
+            // Return potential of particle from trap
+            return e*(alpha_*e/m)*(xi[0]*xi[0] + xi[1]*xi[1]) + 
+                beta_*.5*((2.*xi[2]*xi[2]) - (xi[0]*xi[0]) - (xi[1]*xi[1]));
     }
 };
 

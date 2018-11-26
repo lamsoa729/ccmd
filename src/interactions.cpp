@@ -1,4 +1,5 @@
 #include "interactions.hpp"
+#include "catch.hpp"
 
 CalcCoulombTrapForce::CalcCoulombTrapForce(PS::F64 Vo, PS::F64 Vec, 
                                            PS::F64 ro, PS::F64 zo, 
@@ -22,6 +23,17 @@ void CalcCoulombTrapForce::CCTFPrint(){
     std::cout << "kappa " << kappa_ <<std::endl;
 }
 
+TEST_CASE( "Trap forces are computed", "[trap]" ) {
+    CalcCoulombTrapForce trap(1, 1, 1, 1, 1, 1);
+    Particle ptcl;
+
+    // Testing catch and whatnot
+    REQUIRE( trap.getOmega() == 1);
+    REQUIRE( trap.getAlpha() == 1);
+    REQUIRE( trap.getBeta() == 1);
+    trap = CalcCoulombTrapForce(2,1,1,1,1,1);
+    REQUIRE( trap.getAlpha() == 4);
+}
 
  /*! \brief Applies the fast multipole method of the coloumb force to particles
   * in the system ptcls
