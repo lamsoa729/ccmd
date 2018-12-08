@@ -27,12 +27,14 @@ TEST_CASE( "Trap forces are computed", "[trap]" ) {
     CalcCoulombTrapForce trap(1, 1, 1, 1, 1, 1);
     Particle ptcl;
 
+
     // Testing catch and whatnot
     REQUIRE( trap.getOmega() == 1);
     REQUIRE( trap.getAlpha() == 1);
     REQUIRE( trap.getBeta() == 1);
     trap = CalcCoulombTrapForce(2,1,1,1,1,1);
     REQUIRE( trap.getAlpha() == 4);
+    PS::F
 }
 
  /*! \brief Applies the fast multipole method of the coloumb force to particles
