@@ -26,15 +26,35 @@ void CalcCoulombTrapForce::CCTFPrint(){
 TEST_CASE( "Trap forces are computed", "[trap]" ) {
     CalcCoulombTrapForce trap(1, 1, 1, 1, 1, 1);
     Particle ptcl;
+    ptcl.MockParticle(0);
+    LongForce frc;
+    frc.clear();
+    CHECK( trap.getOmega() == 1);
+    CHECK( trap.getAlpha() == 1);
+    CHECK( trap.getBeta() == 1);
 
-
-    // Testing catch and whatnot
-    REQUIRE( trap.getOmega() == 1);
-    REQUIRE( trap.getAlpha() == 1);
-    REQUIRE( trap.getBeta() == 1);
-    trap = CalcCoulombTrapForce(2,1,1,1,1,1);
-    REQUIRE( trap.getAlpha() == 4);
-    PS::F
+    SECTION( "Particle in the center of trap at time 0" ){
+        trap = CalcCoulombTrapForce(2,1,1,1,1,1);
+        CHECK( trap.getAlpha() == 4);
+        PS::F64 pot = trap.ptclPot(ptcl, frc.force);
+        CHECK(pot == 0);
+    }
+    SECTION( "Particle displaced in z direction of trap at time 0" ){
+        auto trap1 = CalcCoulombTrapForce(2,1,1,1,1,1);
+        PS::F64vec3 pos = {0, 0, .1};
+        ptcl.setPos(pos);
+        CHECK( trap.getAlpha() == 4);
+        PS::F64 pot = trap.ptclPot(ptcl, frc.force);
+        CHECK(ABS(pot - 0.01) < SMALL);
+    }
+    SECTION( "Particle displaced in x direction of trap at time 0" ){
+        auto trap1 = CalcCoulombTrapForce(2,1,1,1,1,1);
+        PS::F64vec3 pos = {0.1, 0, 0};
+        ptcl.setPos(pos);
+        CHECK( trap.getAlpha() == 4);
+        PS::F64 pot = trap.ptclPot(ptcl, frc.force);
+        CHECK(ABS(pot - 0.035) < SMALL);
+    }
 }
 
  /*! \brief Applies the fast multipole method of the coloumb force to particles

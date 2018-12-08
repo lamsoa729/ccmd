@@ -43,13 +43,13 @@ class CalcCoulombForce {
 class CalcCoulombTrapForce {
     /* Initialized data memebers */
     private:
-        inline static PS::F64 Vo_;
-        inline static PS::F64 Vec_;
-        inline static PS::F64 ro_;
-        inline static PS::F64 zo_;
-        inline static PS::F64 Omega_;
-        inline static PS::F64 kappa_;
-        inline static PS::F64 alpha_; 
+        inline static PS::F64 Vo_; // Oscillating potential amplitude
+        inline static PS::F64 Vec_; // DC trapping potential 
+        inline static PS::F64 ro_; // Radius of trap
+        inline static PS::F64 zo_; // Length of trap
+        inline static PS::F64 Omega_; // Angular frequency of oscillating potential
+        inline static PS::F64 kappa_; // Electrode geometry
+        inline static PS::F64 alpha_; // Calculated coefficient 
         inline static PS::F64 beta_;
         /* TODO: Assert these are reasonable numbers <09-10-18, ARL> */
 
@@ -88,7 +88,7 @@ class CalcCoulombTrapForce {
             force += ei*e;
 
             // Return potential of particle from trap
-            return e*(alpha_*e/m)*(xi[0]*xi[0] + xi[1]*xi[1]) + 
+            return e*(alpha_/m)*(xi[0]*xi[0] + xi[1]*xi[1]) + 
                 beta_*.5*((2.*xi[2]*xi[2]) - (xi[0]*xi[0]) - (xi[1]*xi[1]));
     }
 };

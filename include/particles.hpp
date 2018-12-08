@@ -15,7 +15,7 @@ public:
     // Class variables
     Particle();
     Particle(int id, PS::F64 mass, PS::F64 charge){
-        id_ = 
+        id_ =  id;
         mass_ = mass;
         charge_ = charge;
     }
@@ -49,6 +49,18 @@ public:
     void clear() { 
         acc_ = 0.0; 
         pot_ = 0.0;
+    }
+
+    void MockParticle(int id){
+        id_ = id;
+        mass_ = 1;
+        charge_ = 1;
+        PS::F64vec3 vec000 = {0,0,0};
+        PS::F64vec3 vec100 = {1,0,0};
+        pos_ = vec000;
+        vel_ = vec100;
+        acc_ = vec000;
+        pot_ = 0;
     }
 
 
