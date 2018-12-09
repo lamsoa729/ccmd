@@ -54,11 +54,12 @@ class CalcCoulombTrapForce {
         /* TODO: Assert these are reasonable numbers <09-10-18, ARL> */
 
     public:
-    CalcCoulombTrapForce(double Vo, double Vec, double ro, double zo, 
-                      double Omega, double kappa);
+    //CalcCoulombTrapForce(double Vo, double Vec, double ro, double zo, 
+                      //double Omega, double kappa);
     CalcCoulombTrapForce() {}
     void CCTFPrint();
-
+    void ChangeStaticMemberVariables(double Vo, double Vec, double ro, double zo, 
+                      double Omega, double kappa);
     double getOmega(){ return Omega_; }
     double getAlpha(){ return alpha_; }
     double getBeta(){ return beta_; } 

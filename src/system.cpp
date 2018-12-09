@@ -29,7 +29,8 @@ void System::Configure(std::string config_file) {
     GenerateInitialState(mass, charge);
 
     // Initialize constants for CalcOulombTrapForce objects
-    CalcCoulombTrapForce cctp(Vo, Vec, ro_, zo_, Omega, kappa);
+    CalcCoulombTrapForce cctp;
+    cctp.ChangeStaticMemberVariables(Vo, Vec, ro_, zo_, Omega, kappa);
     // Initialize FDPS structures
     dinfo_.initialize();
     ptcls_.initialize();

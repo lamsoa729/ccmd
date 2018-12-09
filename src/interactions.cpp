@@ -1,9 +1,10 @@
 #include "interactions.hpp"
 #include "catch.hpp"
 
-CalcCoulombTrapForce::CalcCoulombTrapForce(PS::F64 Vo, PS::F64 Vec, 
+void CalcCoulombTrapForce::ChangeStaticMemberVariables(PS::F64 Vo, PS::F64 Vec, 
                                            PS::F64 ro, PS::F64 zo, 
                                            PS::F64 Omega, PS::F64 kappa){
+    std::cout << "*** Changing static variables of Paul trap ***" << std::endl;
     Vo_ = Vo;
     Vec_ = Vec;
     ro_ = ro;
@@ -12,46 +13,52 @@ CalcCoulombTrapForce::CalcCoulombTrapForce(PS::F64 Vo, PS::F64 Vec,
     kappa_ = kappa;
     alpha_ = Vo_*Vo_/(Omega_*Omega_*ro_*ro_*ro_*ro_);
     beta_ = Vec_*kappa_/(zo_*zo_);
+    CCTFPrint();
 }
 
 void CalcCoulombTrapForce::CCTFPrint(){
-    std::cout << "Vo "<< Vo_ << std::endl;
-    std::cout << "Vec "<< Vec_ << std::endl;
-    std::cout << "ro "<< ro_ << std::endl;
-    std::cout << "zo "<< zo_ << std::endl;
-    std::cout << "Omega " << Omega_ <<std::endl;
-    std::cout << "kappa " << kappa_ <<std::endl;
+    std::cout << "Vo = "<< Vo_ << std::endl;
+    std::cout << "Vec = "<< Vec_ << std::endl;
+    std::cout << "ro = "<< ro_ << std::endl;
+    std::cout << "zo = "<< zo_ << std::endl;
+    std::cout << "Omega = " << Omega_ <<std::endl;
+    std::cout << "kappa = " << kappa_ <<std::endl;
+    std::cout << "alpha = " << alpha_ <<std::endl;
+    std::cout << "beta = " << alpha_ <<std::endl;
+    std::cout << std::endl;
 }
 
 TEST_CASE( "Trap forces are computed", "[trap]" ) {
-    CalcCoulombTrapForce trap(1, 1, 1, 1, 1, 1);
+    CalcCoulombTrapForce trap;//(1, 1, 1, 1, 1, 1);
     Particle ptcl;
     ptcl.MockParticle(0);
     LongForce frc;
     frc.clear();
+    trap.ChangeStaticMemberVariables(1, 1, 1, 1, 1, 1);
     CHECK( trap.getOmega() == 1);
     CHECK( trap.getAlpha() == 1);
+    // Change static member variables upon implementation
+    trap.ChangeStaticMemberVariables(2, 1, 1, 1, 1, 1);
+    //auto trap1 = CalcCoulombTrapForce(2,1,1,1,1,1);
+    CalcCoulombTrapForce trap1;
+    CHECK( trap.getAlpha() == 4);
     CHECK( trap.getBeta() == 1);
+    CHECK( trap1.getAlpha() == 4);
+    CHECK( trap1.getBeta() == 1);
 
     SECTION( "Particle in the center of trap at time 0" ){
-        trap = CalcCoulombTrapForce(2,1,1,1,1,1);
-        CHECK( trap.getAlpha() == 4);
         PS::F64 pot = trap.ptclPot(ptcl, frc.force);
         CHECK(pot == 0);
     }
     SECTION( "Particle displaced in z direction of trap at time 0" ){
-        auto trap1 = CalcCoulombTrapForce(2,1,1,1,1,1);
         PS::F64vec3 pos = {0, 0, .1};
         ptcl.setPos(pos);
-        CHECK( trap.getAlpha() == 4);
         PS::F64 pot = trap.ptclPot(ptcl, frc.force);
         CHECK(ABS(pot - 0.01) < SMALL);
     }
     SECTION( "Particle displaced in x direction of trap at time 0" ){
-        auto trap1 = CalcCoulombTrapForce(2,1,1,1,1,1);
         PS::F64vec3 pos = {0.1, 0, 0};
         ptcl.setPos(pos);
-        CHECK( trap.getAlpha() == 4);
         PS::F64 pot = trap.ptclPot(ptcl, frc.force);
         CHECK(ABS(pot - 0.035) < SMALL);
     }
